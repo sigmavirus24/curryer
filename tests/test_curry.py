@@ -1,6 +1,6 @@
 import pytest
 
-from currypy import curry
+from curryer import curry
 
 
 class TestCurry:
