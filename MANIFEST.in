@@ -1,0 +1,8 @@
+include README.rst
+include LICENSE
+include HISTORY.rst
+include AUTHORS.rst
+prune *.pyc
+recursive-include curryer/
+recursive-include docs/
+prune docs/_build
