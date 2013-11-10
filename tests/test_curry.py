@@ -32,10 +32,15 @@ class TestCurry:
         assert add(1)(2) == 3
         assert add(1, 2) == 3
 
-    def test_variadic_arguments_behave_differently(self):
+    def test_variadic_positional_arguments_behave_differently(self):
         @curry
         def add(*args):
             return sum(args)
 
         add_multiple = add(1)
         assert add_multiple.curried is True
+        assert add_multiple() == 1
+
+        add_more = add_multiple(2, 3, 4, 5)
+        assert add_more.curried is True
+        assert add_more() == 15
