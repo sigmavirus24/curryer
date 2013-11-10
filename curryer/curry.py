@@ -9,10 +9,10 @@ ARITIES = {
 
 
 class Curry:
-    def __init__(self, func, curried=False, signature=None,
+    def __init__(self, wrapped_callable, curried=False, signature=None,
                  bound_arguments=None):
-        self.signature = signature or inspect.signature(func)
-        self.wrapped_func = func
+        self.signature = signature or inspect.signature(wrapped_callable)
+        self.wrapped_callable = wrapped_callable
         #: True if this is a curried function, False otherwise
         self.curried = curried
         self.bound_args = bound_arguments or self.signature.bind_partial()
@@ -20,26 +20,28 @@ class Curry:
         self._arity = -1
 
     def __repr__(self):
-        func_name = self.wrapped_func.__name__
+        func_name = self.__name__
         if self.curried:
             return 'Curry({}(*{}, **{}))'.format(
-                func_name, self.bound_args.args, self.bound_args.kwargs
+                func_name, self.args, self.kwargs
                 )
         return 'Curry({})'.format(func_name)
 
     def __call__(self, *args, **kwargs):
         if args or kwargs:
             return self.curry(args, kwargs)
-        return apply(self.wrapped_func, self.bound_args)
+        return apply(self.wrapped_callable, self.bound_args)
 
     @property
     def __name__(self):
-        return self.wrapped_func.__name__
+        if hasattr(self.wrapped_callable, '__name__'):
+            return self.wrapped_callable.__name__
+        return repr(self.wrapped_callable)
 
     @property
     def __doc__(self):
         if self._doc is None:
-            self._doc = inspect.getdoc(self.wrapped_func)
+            self._doc = inspect.getdoc(self.wrapped_callable)
         return self._doc
 
     @property
@@ -48,6 +50,14 @@ class Curry:
             self._arity = calculate_arity(self.signature.parameters)
         return self._arity
 
+    @property
+    def args(self):
+        return self.bound_args.args
+
+    @property
+    def kwargs(self):
+        return self.bound_args.kwargs
+
     def curry(self, args, kwargs):
         args = self.bound_args.args + args
         bound_kwargs = self.bound_args.kwargs.copy()
@@ -55,9 +65,9 @@ class Curry:
         bound_args = self.signature.bind_partial(*args, **bound_kwargs)
 
         if len(bound_args.arguments) == self.arity:
-            return apply(self.wrapped_func, bound_args)
+            return apply(self.wrapped_callable, bound_args)
 
-        return Curry(self.wrapped_func, True, self.signature, bound_args)
+        return Curry(self.wrapped_callable, True, self.signature, bound_args)
 
 
 def apply(func, bound_args):
