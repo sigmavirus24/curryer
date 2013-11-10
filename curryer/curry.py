@@ -2,6 +2,11 @@ import inspect
 
 Infinity = float('inf')
 
+ARITIES = {
+    inspect.Parameter.VAR_POSITIONAL: Infinity,
+    inspect.Parameter.VAR_KEYWORD: Infinity,
+    }
+
 
 class Curry:
     def __init__(self, func, curried=False, signature=None,
@@ -60,4 +65,7 @@ def apply(func, bound_args):
 
 
 def calculate_arity(params):
-    return len(params.values())
+    arity = 0
+    for param in params.values():
+        arity += ARITIES.get(param.kind, 1)
+    return arity
