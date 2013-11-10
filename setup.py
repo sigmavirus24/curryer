@@ -11,7 +11,7 @@ kwargs = {}
 requires = []
 packages = ['curryer']
 
-kwargs['tests_require'] = ['pytest==2.3.5']
+kwargs['tests_require'] = ['pytest==2.4.2']
 packages.append('tests')
 
 if sys.argv[-1] in ('submit', 'publish'):
