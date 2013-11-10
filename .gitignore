@@ -1,0 +1,8 @@
+*.pyc
+*.swp
+*.swo
+*.egg*
+.coverage
+.tox
+htmlcov
+docs/_build
