@@ -31,3 +31,11 @@ class TestCurry:
 
         assert add(1)(2) == 3
         assert add(1, 2) == 3
+
+    def test_variadic_arguments_behave_differently(self):
+        @curry
+        def add(*args):
+            return sum(args)
+
+        add_multiple = add(1)
+        assert add_multiple.curried is True
