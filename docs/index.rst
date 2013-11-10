@@ -9,7 +9,7 @@ be curried.
 Example
 -------
 
-Let's get information about a user::
+Let's curry some functions::
 
     from currypy import curry
 
