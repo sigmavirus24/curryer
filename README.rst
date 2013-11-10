@@ -9,16 +9,21 @@ currypy
     def add(a, b):
         return a + b
 
-    assert add(1) is None
-    assert add(2) == 3
+    add1 = add(1)
+    assert add1.curried is True
+    assert add1(2) == 3
 
     @curry
     def variadic(*args, **kwargs):
         return (args, kwargs)
 
-    assert variadic('one', 'two', 'three') is None
-    assert variadic(one='one', two='two', three='three') is None
-    assert variadic() == (
+    three_var = variadic('one', 'two', 'three')
+    assert three_var.curried is True
+    assert three_var() == (('one', 'two', 'three'), {})
+
+    six_var = three_var(one='one', two='two', three='three')
+    assert six_var.curried is True
+    assert six_var() == (
         ('one', 'two', 'three'),
         {'one': 'one', 'two': 'two', 'three': 'three'}
         )
