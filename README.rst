@@ -1,9 +1,9 @@
-currypy
+curryer
 =======
 
 .. code::
 
-    from currypy import curry
+    from curryer import curry
 
     @curry
     def add(a, b):
@@ -27,3 +27,10 @@ currypy
         ('one', 'two', 'three'),
         {'one': 'one', 'two': 'two', 'three': 'three'}
         )
+
+License
+-------
+
+`Modified BSD`_
+
+.. _Modified BSD: https://github.com/sigmavirus24/curryer/blob/master/LICENSE
