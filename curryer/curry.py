@@ -96,7 +96,4 @@ def apply(func, bound_args):
 
 
 def calculate_arity(params):
-    arity = 0
-    for param in params.values():
-        arity += ARITIES.get(param.kind, 1)
-    return arity
+    return sum(ARITIES.get(p.kind, 1) for p in params.values())
