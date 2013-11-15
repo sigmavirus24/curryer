@@ -63,3 +63,11 @@ class TestCurry:
             'four': 4,
             'five': 5
             }
+
+    def test_non_callable_classes_raise_ValueError(self):
+        class Foo:
+            def __init__(self):
+                pass
+
+        with pytest.raises(TypeError):
+            curry(Foo)
