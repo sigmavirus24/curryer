@@ -11,7 +11,7 @@ Example
 
 Let's curry some functions::
 
-    from currypy import curry
+    from curryer import curry
 
     @curry
     def add(a, b):
