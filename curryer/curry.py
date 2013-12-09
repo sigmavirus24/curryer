@@ -14,16 +14,12 @@ class Curry:
         self.wrapped_callable = wrapped_callable
         self.wrapped_class = None
         self.instance = None
-        self.is_class = inspect.isclass(wrapped_callable)
 
-        if self.is_class:
-            self.wrapped_class = wrapped_callable
-            self.wrapped_callable = None
-            self.signature = None
-            self.bound_args = None
-        else:
-            self.signature = signature or inspect.signature(wrapped_callable)
-            self.bound_args = bound_arguments or self.signature.bind_partial()
+        if inspect.isclass(wrapped_callable):
+            raise ValueError('Classes are not supported by curryer yet')
+
+        self.signature = signature or inspect.signature(wrapped_callable)
+        self.bound_args = bound_arguments or self.signature.bind_partial()
 
         #: True if this is a curried function, False otherwise
         self.curried = curried
@@ -39,9 +35,6 @@ class Curry:
         return 'Curry({})'.format(func_name)
 
     def __call__(self, *args, **kwargs):
-        if self.is_class:
-            return self.curry_instance(args, kwargs)
-
         if args or kwargs:
             return self.curry_func(args, kwargs)
         return apply(self.wrapped_callable, self.bound_args)
@@ -82,13 +75,6 @@ class Curry:
             return apply(self.wrapped_callable, bound_args)
 
         return Curry(self.wrapped_callable, True, self.signature, bound_args)
-
-    def curry_instance(self, args, kwargs):
-        instance = self.wrapped_class(*args, **kwargs)
-        signature = inspect.signature(instance.__call__)
-        curry = Curry(instance.__call__, False, signature)
-        curry.instance = instance
-        return curry
 
 
 def apply(func, bound_args):

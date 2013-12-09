@@ -64,6 +64,7 @@ class TestCurry:
             'five': 5
             }
 
+    @pytest.mark.xfail
     def test_curry_accepts_classes(self):
         @curry
         class Bar:
@@ -78,11 +79,10 @@ class TestCurry:
         b = Bar()
         assert b() is None
 
-    @pytest.mark.xfail
     def test_non_callable_classes_raise_ValueError(self):
         class Foo:
             def __init__(self):
                 pass
 
-        with pytest.raises(TypeError):
+        with pytest.raises(ValueError):
             curry(Foo)
