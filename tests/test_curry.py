@@ -86,3 +86,17 @@ class TestCurry:
 
         with pytest.raises(ValueError):
             curry(Foo)
+
+    def test_detects_finite_arity(self):
+        @curry
+        def foo(a, b):
+            return (a, b)
+
+        assert foo.arity == 2
+
+    def test_detects_infinite_arity(self):
+        @curry
+        def foo(*args):
+            return args
+
+        assert foo.arity == float('inf')
