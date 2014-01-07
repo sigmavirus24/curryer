@@ -17,7 +17,9 @@ class Curry:
         #: The original function
         self.wrapped_callable = wrapped_callable
 
+        # Only generate the signature if we have to
         self.signature = signature or inspect.signature(wrapped_callable)
+        # Only make some bound arguments if none already exist
         self.bound_args = bound_arguments or self.signature.bind_partial()
 
         #: True if this is a curried function, False otherwise
@@ -79,8 +81,12 @@ class Curry:
 
 
 def apply(func, bound_args):
+    """Function to properly apply a function with the arguments we have"""
     return func(*bound_args.args, **bound_args.kwargs)
 
 
 def calculate_arity(params):
+    """
+    Simple way to calculate the arity of a function by checking the parameters
+    """
     return sum(ARITIES.get(p.kind, 1) for p in params.values())
