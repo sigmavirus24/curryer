@@ -11,10 +11,11 @@ ARITIES = {
 class Curry:
     def __init__(self, wrapped_callable, curried=False, signature=None,
                  bound_arguments=None):
-        self.wrapped_callable = wrapped_callable
-
         if inspect.isclass(wrapped_callable):
             raise ValueError('Classes are not supported by curryer yet')
+
+        #: The original function
+        self.wrapped_callable = wrapped_callable
 
         self.signature = signature or inspect.signature(wrapped_callable)
         self.bound_args = bound_arguments or self.signature.bind_partial()
@@ -57,10 +58,12 @@ class Curry:
 
     @property
     def args(self):
+        """Arguments that have been passed to the wrapped callable."""
         return self.bound_args.args
 
     @property
     def kwargs(self):
+        """Keyword arguments already passed to the wrapped callable."""
         return self.bound_args.kwargs
 
     def curry_func(self, args, kwargs):
