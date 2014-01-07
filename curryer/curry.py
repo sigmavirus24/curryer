@@ -12,8 +12,6 @@ class Curry:
     def __init__(self, wrapped_callable, curried=False, signature=None,
                  bound_arguments=None):
         self.wrapped_callable = wrapped_callable
-        self.wrapped_class = None
-        self.instance = None
 
         if inspect.isclass(wrapped_callable):
             raise ValueError('Classes are not supported by curryer yet')
